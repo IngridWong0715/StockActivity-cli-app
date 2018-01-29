@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+
+StockActivity::CLI.new.call

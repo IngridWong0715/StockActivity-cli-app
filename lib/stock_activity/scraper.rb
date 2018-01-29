@@ -1,0 +1,3 @@
+class StockActivity::Scraper
+
+end

@@ -1,0 +1,2 @@
+class StockActivity::Stock
+end
