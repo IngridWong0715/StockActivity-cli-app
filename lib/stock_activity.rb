@@ -1,6 +1,4 @@
-require "stock_activity/version"
-require_relative '../config/environment'
-
 module StockActivity
-  # Your code goes here...
 end
+
+require_relative '../config/environment' #why does think have to come after?
