@@ -3,11 +3,98 @@
 # keep unusual volume: has one additional column: volume_percentage_change
 
 require_relative '../stock_activity.rb'
+
+
 class StockActivity::Scraper
 
-  # def self.get_page
-  #   Nokogiri::HTML(open("http://www.nasdaq.com/"))
-  # end
+  attr_accessor :selector
+
+  def self.transform_input_to_selector(input) #input should come from CLI user input
+    if input == "most active"
+      @selector = "Mostactive"
+    elsif input == "most advanced"
+      @selector = "Advancers"
+    elsif input == "most declined"
+      @selector = "Decliners"
+    elsif input == "dollar volume"
+      @selector = "DollarVolume"
+    elsif input == "unusual volume"
+      @selector = "UnusualVolume"
+    end
+
+    @selector
+
+  end
+
+
+  def self.scrape_except_unusual_volume
+
+    input = transform_input_to_selector("most active")
+
+doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
+
+  all =  doc.css("div\##{input} tr > td").children
+
+  acc = all.reduce([]) do |accumulator, company|
+    #binding.pry
+    if company.text.match(/[A-Z]|\d|unch/)
+      accumulator << company.text
+    end
+    accumulator
+  end
+
+
+  acc.map! do |info|
+    info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
+  end
+
+
+
+  #turn acc into nested array:
+  counter = 0
+  subarray = []
+  nested = acc.reduce([]) do |accumulator, info|
+    if counter < 3
+      subarray << info
+      counter += 1
+
+  elsif counter == 3
+      subarray << info
+      accumulator << subarray
+      subarray = []
+      counter = 0
+
+    end
+
+    accumulator
+  end
+
+  companies_info = []
+  nested.each do |company_group|
+
+    company = {}
+    company_group.each_with_index do |info, index|
+
+      if index % 4 == 0
+        company[:company_name] = info
+
+      elsif index % 4 == 1
+
+        company[:last_sale] = info
+      elsif index % 4 == 2
+        company[:change_net_percentage] = info
+      elsif index % 4 == 3
+        company[:share_volume] = info
+        companies_info << company
+      end
+
+    end
+  end
+
+  companies_info
+
+  end
+
 
   def self.scrape_most_active
     doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
