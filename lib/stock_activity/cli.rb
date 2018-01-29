@@ -10,11 +10,11 @@ class StockActivity::CLI
     input = gets.strip.downcase
 
     if input == "most active"
-      puts "most active"
+      puts "scraping most active"
     elsif input == "most advanced"
-      puts "most advanced"
+      puts "scraping most advanced"
     elsif input == "most declined"
-      puts "most declined"
+      puts "scraping  most declined"
     elsif input == "dollar volume"
       puts "dollar volume"
     elsif input == "unusual volume"
