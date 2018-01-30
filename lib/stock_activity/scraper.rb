@@ -7,33 +7,14 @@ require_relative '../stock_activity.rb'
 
 class StockActivity::Scraper
 
-  attr_accessor :selector
 
-  def self.transform_input_to_selector(input) #input should come from CLI user input
-    if input == "most active"
-      @selector = "Mostactive"
-    elsif input == "most advanced"
-      @selector = "Advancers"
-    elsif input == "most declined"
-      @selector = "Decliners"
-    elsif input == "dollar volume"
-      @selector = "DollarVolume"
-    # elsif input == "unusual volume"
-    #   @selector = "UnusualVolume"
-    end
+  def self.scrape_except_unusual_volume(selector)
 
-    @selector
-
-  end
-
-
-  def self.scrape_except_unusual_volume
-
-    input = transform_input_to_selector("most active")
+  #  input = transform_input_to_selector("most active")
 
 doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
 
-  all =  doc.css("div\##{input} tr > td").children
+  all =  doc.css("div\##{selector} tr > td").children
 
   acc = all.reduce([]) do |accumulator, company|
     #binding.pry
