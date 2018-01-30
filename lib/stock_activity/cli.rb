@@ -37,11 +37,11 @@ class StockActivity::CLI
 
   def display_stocks
     StockActivity::Stock.all.each do |stock|
-      puts stock.company_name.colorize(:blue)
-      puts stock.last_sale.colorize(:magenta)
-      puts stock.change_net_percentage.colorize(:magenta)
-      puts stock.share_volume.colorize(:magenta)
-      puts stock.volume_percentage_change.colorize(:magenta) if stock.volume_percentage_change != nil
+      puts "Company: " + stock.company_name.colorize(:blue)
+      puts "Last Sale: " + stock.last_sale.colorize(:magenta)
+      puts "Change Net/%: " + stock.change_net_percentage.colorize(:magenta)
+      puts "Share Volume: " + stock.share_volume.colorize(:magenta)
+      puts "Volume % Change: " + stock.volume_percentage_change.colorize(:magenta) if stock.volume_percentage_change != nil
       puts "\n"
     end
     nil

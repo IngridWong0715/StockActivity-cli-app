@@ -1,5 +1,5 @@
 class StockActivity::Stock
-  attr_accessor :company_name, :last_sale, :change_net_percentage, :share_volume, :volume_percentage_change
+  attr_accessor :company_name, :last_sale, :change_net_percentage, :share_volume, :volume_percentage_change, :url
 
   @@all = []
 
