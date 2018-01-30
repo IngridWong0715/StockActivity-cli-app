@@ -11,14 +11,14 @@ class StockActivity::Scraper
     doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
     companies =  doc.css("div\##{selector} tr > td").children.reduce([]) do |accumulator, company|
       if company.text.match(/[A-Z]|\d|unch/)
-        accumulator << company.text
+        accumulator << company.text.strip
       end
     accumulator
     end
 
-    companies.map! do |info|
-      info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
-    end
+    # companies.map! do |info|
+    #   info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
+    # end
 
   #turn acc into nested array:
     counter = 0
@@ -63,7 +63,7 @@ class StockActivity::Scraper
       company[:url] = links.first
       links.shift
     end
-binding.pry
+
     companies_info
   end
 
@@ -73,14 +73,15 @@ binding.pry
 
     companies = doc.css("div#UnusualVolume tr > td").children.reduce([]) do |accumulator, company|
       if company.text.match(/[A-Z]|\d|unch/)
-        accumulator << company.text
+        accumulator << company.text.strip
       end
       accumulator
     end
-
-    companies.map! do |info|
-      info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
-    end
+binding.pry
+    # companies.map! do |info|
+    #   #info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
+    #   info.strip
+    # end
 
     #turn acc into nested array:
     counter = 0
@@ -126,5 +127,32 @@ binding.pry
     companies_info
 
   end
+
+  # END LIST METHODS
+
+  #START: DETAIL METHODS
+
+  def self.scrape_stock_details #(stock) #stock is an instance of Stock class
+    stock_page = Nokogiri::HTML(open("http://www.nasdaq.com/symbol/gern"))  #should be stock.url
+    stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
+
+    transformed = transform(stock_details_to_transform)
+  
+  end
+
+  def self.transform(array)
+    stock_details_array = []
+    temp_arr = []
+
+    array.each_with_index do |detail, index|
+      temp_arr << detail.text.strip
+      if index.odd? && index > 0
+        stock_details_array << temp_arr
+        temp_arr = []
+      end
+    end
+    stock_details_array
+  end
+
 
 end

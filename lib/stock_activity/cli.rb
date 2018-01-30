@@ -17,6 +17,12 @@ class StockActivity::CLI
       StockActivity::Stock.create_from_collection(StockActivity::Scraper.scrape_unusual_volume)
     end
     display_stocks
+    ### end first time
+
+    puts "Would you like to get more details on a specific stock, please enter the company symbol. View another category? Or exit?"
+    second_input = gets.strip.downcase
+  
+
   end
 
   def transform_input_to_selector(input)
@@ -49,13 +55,3 @@ class StockActivity::CLI
 
 
 end
-
-#
-# show options:
-# 	- Most Active
-# 	- Most Advanced
-# 	- Most Declined
-# 	- Dollar Volume
-# 	- Unusual Volume
-# User picks one option
-# Display each company, last sasle, change net/%, share volume

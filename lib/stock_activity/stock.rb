@@ -12,6 +12,9 @@ class StockActivity::Stock
     stocks_array.each {|stock_hash| self.new(stock_hash)}
   end
 
+  def add_more_attributes
+  end
+
   def self.all
     @@all
   end
