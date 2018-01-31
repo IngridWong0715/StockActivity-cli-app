@@ -132,9 +132,24 @@ class StockActivity::Scraper
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
 
     transformed = transform(stock_details_to_transform)
+
+# remove special characters : ASK HOW TO USE PARAMETERIZE / COMBINE GSUB
+    transformed.each do |attr_pair|
+      attr_pair[0].downcase!
+      attr_pair[0].gsub!(/\s\/\s/, "_")
+      attr_pair[0].gsub!(/\s/, "_")
+      attr_pair[0].gsub!(/\d+_/, "")
+      attr_pair[0].gsub!(/\//, "")
+      attr_pair[0].gsub!(/\(/, "")
+      attr_pair[0].gsub!(/\)/, "")
+      attr_pair[0].gsub!(/\'/, "")
+      attr_pair[0].gsub!(/\./, "")
+    end
+
+
     transformed.reduce({}) do |acc, attribute_pair|
 
-      acc[attribute_pair[0].downcase.gsub(" ","_").to_sym] = attribute_pair[1]
+      acc[attribute_pair[0].to_sym] = attribute_pair[1]
       acc
     end
 

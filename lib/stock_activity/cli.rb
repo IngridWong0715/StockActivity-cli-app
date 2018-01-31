@@ -1,4 +1,4 @@
-#require 'colorize'
+
 
 class StockActivity::CLI
   def call
@@ -17,11 +17,27 @@ class StockActivity::CLI
       StockActivity::Stock.create_from_collection(StockActivity::Scraper.scrape_unusual_volume)
     end
     display_stocks
+
+searched = StockActivity::Stock.find_by_name("Apple Inc.")
+binding.pry
+
     ### end first time
 
     puts "Would you like to get more details on a specific stock, please enter the company symbol. View another category? Or exit?"
-    second_input = gets.strip.downcase
-  
+    #second_input = gets.strip.downcase
+
+    ### IMPLEMENT: SPECIFIC Stock
+    # 1. find that stock from StockActivity::Stock.all
+    # 2. get its url and pass it into StockActivity::Scraper.scrape_stock_details(url)
+    # 3. pass the return value of above into specific_stock.add_more_attributes(attribute_hash)
+    # 4. display the stock
+    #
+
+
+    #
+
+
+
 
   end
 
