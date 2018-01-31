@@ -16,10 +16,6 @@ class StockActivity::Scraper
     accumulator
     end
 
-    # companies.map! do |info|
-    #   info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
-    # end
-
   #turn acc into nested array:
     counter = 0
     subarray = []
@@ -77,11 +73,8 @@ class StockActivity::Scraper
       end
       accumulator
     end
-binding.pry
-    # companies.map! do |info|
-    #   #info.include?("\r") ? info.scan(/[A-Z].*\)/).first : info
-    #   info.strip
-    # end
+
+
 
     #turn acc into nested array:
     counter = 0
@@ -98,6 +91,8 @@ binding.pry
       end
       accumulator
     end
+
+    binding.pry
 
     companies_info = []
     nested.each do |company_group|
@@ -137,7 +132,16 @@ binding.pry
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
 
     transformed = transform(stock_details_to_transform)
-  
+    transformed.reduce({}) do |acc, attribute_pair|
+
+      acc[attribute_pair[0].downcase.gsub(" ","_").to_sym] = attribute_pair[1]
+      acc
+    end
+
+    # output:
+    # {:"best_bid_/_ask"=>"$ 2.25 / $ 2.80", :"1_year_target"=>"3.75", :"today's_high_/_low"=>"$ 2.75 / $ 2.30", :share_volume=>"13,763,427", :"50_day_avg._daily_volume"=>"1,688,848", :previous_close=>"$ 2.35", :"52_week_high_/_low"=>"$ 3.15 / $ 1.74", :market_cap=>"402,856,489", :"p/e_ratio"=>"NE", :"forward_p/e_(1y)"=>"NE", :"earnings_per_share_(eps)"=>"$ -0.18", :annualized_dividend=>"N/A", :ex_dividend_date=>"N/A", :dividend_payment_date=>"N/A", :current_yield=>"0 %", :beta=>"0.6"}
+    #
+
   end
 
   def self.transform(array)
