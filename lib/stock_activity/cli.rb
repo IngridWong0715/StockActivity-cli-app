@@ -18,7 +18,11 @@ class StockActivity::CLI
     end
     display_stocks
 
-searched = StockActivity::Stock.find_by_name("Apple Inc.")
+    searched_stock = StockActivity::Stock.find_by_name("Apple ")
+    attributes_hash = StockActivity::Scraper.scrape_stock_details(searched_stock.url)
+    searched_stock.add_more_attributes(attributes_hash)
+    
+
 binding.pry
 
     ### end first time

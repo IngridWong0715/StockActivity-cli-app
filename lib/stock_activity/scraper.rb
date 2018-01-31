@@ -127,8 +127,8 @@ class StockActivity::Scraper
 
   #START: DETAIL METHODS
 
-  def self.scrape_stock_details #(stock) #stock is an instance of Stock class
-    stock_page = Nokogiri::HTML(open("http://www.nasdaq.com/symbol/gern"))  #should be stock.url
+  def self.scrape_stock_details(url) #stock is an instance of Stock class
+    stock_page = Nokogiri::HTML(open(url))  #should be stock.url
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
 
     transformed = transform(stock_details_to_transform)

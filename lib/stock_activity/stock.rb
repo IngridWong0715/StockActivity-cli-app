@@ -22,7 +22,7 @@ class StockActivity::Stock
   end
 
   def self.find_by_name(name)
-    @@all.detect {|stock| stock.company_name == name}
+    @@all.detect {|stock| stock.company_name.include?(name)}
   end
 
   def self.all
