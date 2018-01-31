@@ -16,6 +16,7 @@ class StockActivity::Scraper
     accumulator
     end
 
+
   #turn acc into nested array:
     counter = 0
     subarray = []
@@ -92,7 +93,7 @@ class StockActivity::Scraper
       accumulator
     end
 
-    binding.pry
+
 
     companies_info = []
     nested.each do |company_group|
@@ -173,5 +174,21 @@ class StockActivity::Scraper
     stock_details_array
   end
 
+  #   def self.transform_to_nested(array, num)
+  #
+  #   # push temp array into final array when index = 3, 7, 11
+  #     temp_array = []
+  #     final_array = []
+  #     array.each.with_index(1) do |element, index|
+  #       temp_array << element
+  #
+  #       if index % num == 0 && index > 0
+  #         final_array << temp_array
+  #         temp_array = []
+  #       end
+  #     end
+  #     final_array
+  #
+  # end
 
 end

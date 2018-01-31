@@ -70,26 +70,30 @@ class StockActivity::CLI
   end
 
   def display_stock_details(stock)
+    binding.pry
     puts "\n#{stock.company_name} Common Stock Quote & Summary Data".colorize(:blue)
     puts "#{stock.last_sale.colorize(:magenta)} #{stock.change_net_percentage.colorize(:magenta)}"
     puts "\n\n"
     puts "Key Stock Data \n"
-    puts "Best Bid / Ask: " + stock.best_bid_ask.colorize(:magenta)
-    puts "1 Year Target: " + stock.year_target.colorize(:magenta)
-    puts "Today's High / Low: " + stock.todays_high_low.colorize(:magenta)
-    puts "Share Volume: " + stock.share_volume.colorize(:magenta)
-    puts "50 Day Avg. Daily Volume: " + stock.day_avg_daily_volume.colorize(:magenta)
-    puts "Previous Close: " + stock.previous_close.colorize(:magenta)
-    puts "52 Week High / Low: " + stock.week_high_low.colorize(:magenta)
-    puts "Market Cap: " + stock.market_cap.colorize(:magenta)
-    puts "P/E Ratio: " + stock.pe_ratio.colorize(:magenta)
-    puts "Forward P/E (1y): " + stock.forward_pe_1y.colorize(:blue)
-    puts "Earnings Per Share (EPS): " + stock.earnings_per_share_eps.colorize(:magenta)
-    puts "Annualized Dividend: " + stock.annualized_dividend.colorize(:magenta)
-    puts "Ex Dividend Date: " + stock.ex_dividend_date.colorize(:magenta)
-    puts "Dividend Payment Date: " + stock.dividend_payment_date.colorize(:magenta)
-    puts "Current Yield: " + stock.current_yield.colorize(:magenta)
-    puts "Beta: " + stock.beta.colorize(:magenta)
+    stock.all_details.each do |detail|
+      puts "#{detail}: #{stock.send(detail)} "
+    end
+    # puts "Best Bid / Ask: " + stock.best_bid_ask.colorize(:magenta)
+    # puts "1 Year Target: " + stock.year_target.colorize(:magenta)
+    # puts "Today's High / Low: " + stock.todays_high_low.colorize(:magenta)
+    # puts "Share Volume: " + stock.share_volume.colorize(:magenta)
+    # puts "50 Day Avg. Daily Volume: " + stock.day_avg_daily_volume.colorize(:magenta)
+    # puts "Previous Close: " + stock.previous_close.colorize(:magenta)
+    # puts "52 Week High / Low: " + stock.week_high_low.colorize(:magenta)
+    # puts "Market Cap: " + stock.market_cap.colorize(:magenta)
+    # puts "P/E Ratio: " + stock.pe_ratio.colorize(:magenta)
+    # puts "Forward P/E (1y): " + stock.forward_pe_1y.colorize(:blue)
+    # puts "Earnings Per Share (EPS): " + stock.earnings_per_share_eps.colorize(:magenta)
+    # puts "Annualized Dividend: " + stock.annualized_dividend.colorize(:magenta)
+    # puts "Ex Dividend Date: " + stock.ex_dividend_date.colorize(:magenta)
+    # puts "Dividend Payment Date: " + stock.dividend_payment_date.colorize(:magenta)
+    # puts "Current Yield: " + stock.current_yield.colorize(:magenta)
+    # puts "Beta: " + stock.beta.colorize(:magenta)
   end
 
 
