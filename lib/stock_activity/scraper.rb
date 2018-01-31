@@ -3,14 +3,17 @@ require_relative '../stock_activity.rb'
 class StockActivity::Scraper
 
 
-  def self.scrape_except_unusual_volume(selector)
-    doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
-    companies =  doc.css("div\##{selector} tr > td").children.reduce([]) do |accumulator, company|
-      if company.text.match(/[A-Z]|\d|unch/)
-        accumulator << company.text.strip
-      end
-    accumulator
+
+def self.scrape(selector)
+  doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
+  companies =  doc.css("div\##{selector} tr > td").children.reduce([]) do |accumulator, company|
+    if company.text.match(/[A-Z]|\d|unch/)
+      accumulator << company.text.strip
     end
+  accumulator
+  end
+
+  if companies.count == 20
 
     nested = transform_to_nested_companies(companies, 4)
 
@@ -31,29 +34,10 @@ class StockActivity::Scraper
       end
     end
 
-    #scrape links and add them to each company:
-    links = doc.css("div##{selector} div.coName a").collect {|company| company.attr('href')}.uniq!
-    companies_info.each do |company|
-      company[:url] = links.first
-      links.shift
-    end
-    companies_info
-  end
-
-  def self.scrape_unusual_volume
-
-    doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
-
-    companies = doc.css("div#UnusualVolume tr > td").children.reduce([]) do |accumulator, company|
-      if company.text.match(/[A-Z]|\d|unch/)
-        accumulator << company.text.strip
-      end
-      accumulator
-    end
-
-    #turn acc into nested array:
-
+  elsif companies.count == 25
     nested = transform_to_nested_companies(companies, 5)
+
+
     companies_info = []
     nested.each do |company_group|
       company = {}
@@ -73,15 +57,16 @@ class StockActivity::Scraper
       end
     end
 
-    #scrape links and add them to each company:
-    links = doc.css("div#UnusualVolume div.coName a").collect {|company| company.attr('href')}.uniq!
-    companies_info.each do |company|
-      company[:url] = links.first
-      links.shift
-    end
-    companies_info
-
   end
+  #scrape links and add them to each company:
+  links = doc.css("div##{selector} div.coName a").collect {|company| company.attr('href')}.uniq!
+  companies_info.each do |company|
+    company[:url] = links.first
+    links.shift
+  end
+  companies_info
+end
+
 
   # END LIST METHODS
 

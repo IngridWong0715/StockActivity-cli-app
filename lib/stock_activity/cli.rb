@@ -2,7 +2,7 @@
 
 class StockActivity::CLI
 
-  attr_accessor :second_input
+  #attr_accessor :second_input
   def call
     puts "Welcome to Stock Activities! Which kind of stock activity would you like to see?"
     start
@@ -12,18 +12,14 @@ class StockActivity::CLI
     puts "Please enter: most active, most advanced, most declined, dollar volume, or unusual volume"
     input = gets.strip.downcase
     selector = transform_input_to_selector(input)
-    if selector == "Mostactive" || selector == "Advancers" || selector == "Decliners" || selector == "DollarVolume"
-      stocks_collection = StockActivity::Scraper.scrape_except_unusual_volume(selector)
-      StockActivity::Stock.create_from_collection(stocks_collection)
-    elsif selector == "UnusualVolume"
-      StockActivity::Stock.create_from_collection(StockActivity::Scraper.scrape_unusual_volume)
-    end
+    stocks_collection = StockActivity::Scraper.scrape(selector)
+    StockActivity::Stock.create_from_collection(stocks_collection)
     display_stocks
 
     ### end first time
 
     puts "Would you like to get more details on a specific stock, please enter the company symbol. View another category? Or exit?"
-    @second_input = gets.strip
+    second_input = gets.strip
 
     ### IMPLEMENT: SPECIFIC Stock
     # 1. find that stock from StockActivity::Stock.all
