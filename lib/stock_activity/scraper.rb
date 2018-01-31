@@ -2,8 +2,6 @@ require_relative '../stock_activity.rb'
 
 class StockActivity::Scraper
 
-
-
 def self.scrape(selector)
   doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
   companies =  doc.css("div\##{selector} tr > td").children.reduce([]) do |accumulator, company|
@@ -15,7 +13,7 @@ def self.scrape(selector)
 
   if companies.count == 20
 
-    nested = transform_to_nested_companies(companies, 4)
+    nested = transform_to_nested(companies, 4)
 
     companies_info = []
     nested.each do |company_group|
@@ -35,9 +33,8 @@ def self.scrape(selector)
     end
 
   elsif companies.count == 25
-    nested = transform_to_nested_companies(companies, 5)
 
-
+    nested = transform_to_nested(companies, 5)
     companies_info = []
     nested.each do |company_group|
       company = {}
@@ -75,7 +72,7 @@ end
   def self.scrape_stock_details(url) #stock is an instance of Stock class
     stock_page = Nokogiri::HTML(open(url))  #should be stock.url
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
-    transformed = transform_to_nested_details(stock_details_to_transform, 2)
+    transformed = transform_to_nested(stock_details_to_transform, 2)
 
     # remove special characters : ASK HOW TO USE PARAMETERIZE / COMBINE GSUB
     transformed.each do |attr_pair|
@@ -96,35 +93,25 @@ end
     end
   end
 
-    def self.transform_to_nested_companies(array, num)
-      temp_array = []
-      final_array = []
-      array.each_with_index do |element, index|
+  def self.transform_to_nested(array, num)
+    temp_array = []
+    final_array = []
+    array.each_with_index do |element, index|
+
+      #element.class == String
+      if element.class == String
         temp_array << element
-        if (index+1) % num == 0 && (index+1) > 0
-          final_array << temp_array
-          temp_array = []
-        end
-      end
-      final_array
-    end
-
-
-    def self.transform_to_nested_details(array, num)
-
-      temp_array = []
-      final_array = []
-      array.each_with_index do |element, index|
-
+      else
         temp_array << element.text.strip
-
-        if (index+1) % num == 0 && (index+1) > 0
-          final_array << temp_array
-          temp_array = []
-        end
       end
-      final_array
 
+      if (index+1) % num == 0 && (index+1) > 0
+        final_array << temp_array
+        temp_array = []
+      end
+    end
+    final_array
   end
+
 
 end
