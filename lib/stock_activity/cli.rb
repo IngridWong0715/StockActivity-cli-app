@@ -70,11 +70,12 @@ class StockActivity::CLI
   end
 
   def display_stock_details(stock)
-    binding.pry
+
     puts "\n#{stock.company_name} Common Stock Quote & Summary Data".colorize(:blue)
     puts "#{stock.last_sale.colorize(:magenta)} #{stock.change_net_percentage.colorize(:magenta)}"
     puts "\n\n"
     puts "Key Stock Data \n"
+
     stock.all_details.each do |detail|
       puts "#{detail}: #{stock.send(detail)} "
     end
@@ -94,7 +95,9 @@ class StockActivity::CLI
     # puts "Dividend Payment Date: " + stock.dividend_payment_date.colorize(:magenta)
     # puts "Current Yield: " + stock.current_yield.colorize(:magenta)
     # puts "Beta: " + stock.beta.colorize(:magenta)
+      nil
   end
+
 
 
 end
