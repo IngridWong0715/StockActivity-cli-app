@@ -19,9 +19,6 @@ Or install it yourself as:
 
     $ gem install stock_activity
 
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
