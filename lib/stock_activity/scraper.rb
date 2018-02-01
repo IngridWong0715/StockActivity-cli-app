@@ -69,25 +69,20 @@ end
 
   #START: DETAIL METHODS
 
-  def self.scrape_stock_details(url) #stock is an instance of Stock class
-    stock_page = Nokogiri::HTML(open(url))  #should be stock.url
+  def self.scrape_stock_details(stock) #stock is an instance of Stock class
+    # url = stock.url
+    stock_page = Nokogiri::HTML(open(stock.url))  #should be stock.url
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
     transformed = transform_to_nested(stock_details_to_transform, 2)
 
-    # remove special characters : ASK HOW TO USE PARAMETERIZE / COMBINE GSUB
-    transformed.each do |attr_pair|
-      attr_pair[0].downcase!
-      attr_pair[0].gsub!(/\s\/\s/, "_")
-      attr_pair[0].gsub!(/\s/, "_")
-      attr_pair[0].gsub!(/\d+_/, "")
-      attr_pair[0].gsub!(/\//, "")
-      attr_pair[0].gsub!(/\(/, "")
-      attr_pair[0].gsub!(/\)/, "")
-      attr_pair[0].gsub!(/\'/, "")
-      attr_pair[0].gsub!(/\./, "")
+    stock.formatted_detail_pairs = transformed #FOR DISPLAYING PURPOSES
+
+    copied_array = transformed.reduce([]) do |acc, attr_pair|
+      new_string = attr_pair[0].downcase.gsub(/\s\/\s/, "_").gsub(/\s\/\s/, "_").gsub(/\s/, "_").gsub(/\d+_/, "").gsub(/\//, "").gsub(/\(/, "").gsub(/\)/, "").gsub(/\'/, "").gsub(/\./, "")
+      acc << [new_string, attr_pair[1]]
     end
 
-    transformed.reduce({}) do |acc, attribute_pair|
+    copied_array.reduce({}) do |acc, attribute_pair|
       acc[attribute_pair[0].to_sym] = attribute_pair[1]
       acc
     end
@@ -97,8 +92,6 @@ end
     temp_array = []
     final_array = []
     array.each_with_index do |element, index|
-
-      #element.class == String
       if element.class == String
         temp_array << element
       else
@@ -112,6 +105,4 @@ end
     end
     final_array
   end
-
-
 end

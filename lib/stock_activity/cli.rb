@@ -3,37 +3,54 @@
 class StockActivity::CLI
 
   #attr_accessor :second_input
-  def call
-    puts "Welcome to Stock Activities! Which kind of stock activity would you like to see?"
-    start
+  def start
+    puts "\n\nWelcome to Stock Activities! This program lets you view daily stock activities.\n\n"
+    main_loop
   end
 
-  def start
-    puts "Please enter: most active, most advanced, most declined, dollar volume, or unusual volume"
+  def main_loop
+    input = nil
+    while input != "exit"
+      puts "Would you like to view a category, get more details on a specific stock from the above category, or exit?"
+      puts "I accept: category, stock, and exit\n"
+      input = gets.strip.downcase
+      if input == "stock"
+        detail_view
+      elsif input == "category"
+        view_category
+      elsif input == "exit"
+        puts "Goodbye."
+        exit
+      else
+        puts "Invalid input. Please enter: stock, category, or exit\n"
+      end
+    end
+  end
+
+  def view_category
+    puts "Which type of stock activity would you like to see?"
+    puts "I accept: most active, most advanced, most declined, dollar volume, unusual volume\n"
+
     input = gets.strip.downcase
     selector = transform_input_to_selector(input)
     stocks_collection = StockActivity::Scraper.scrape(selector)
     StockActivity::Stock.create_from_collection(stocks_collection)
     display_stocks
 
-    ### end first time
 
-    puts "Would you like to get more details on a specific stock, please enter the company symbol. View another category? Or exit?"
-    second_input = gets.strip
 
-    ### IMPLEMENT: SPECIFIC Stock
-    # 1. find that stock from StockActivity::Stock.all
-    # 2. get its url and pass it into StockActivity::Scraper.scrape_stock_details(url)
-    # 3. pass the return value of above into specific_stock.add_more_attributes(attribute_hash)
-    # 4. display the stock
-    #
+  end
 
-    searched_stock = StockActivity::Stock.find_by_name(second_input)
-    attributes_hash = StockActivity::Scraper.scrape_stock_details(searched_stock.url)
+  def detail_view
+    puts "Please enter the stock symbol.\n"
+    input = gets.strip
+
+    searched_stock = StockActivity::Stock.find_by_name(input)
+    attributes_hash = StockActivity::Scraper.scrape_stock_details(searched_stock)
     searched_stock.add_more_attributes(attributes_hash)
-
     display_stock_details(searched_stock)
 
+    main_loop
 
   end
 
@@ -54,27 +71,31 @@ class StockActivity::CLI
   end
 
   def display_stocks
+    puts "\n\n"
     StockActivity::Stock.all.each do |stock|
+
       puts "Company: " + stock.company_name.colorize(:blue)
       puts "Last Sale: " + stock.last_sale.colorize(:magenta)
       puts "Change Net/%: " + stock.change_net_percentage.colorize(:magenta)
       puts "Share Volume: " + stock.share_volume.colorize(:magenta)
       puts "Volume % Change: " + stock.volume_percentage_change.colorize(:magenta) if stock.volume_percentage_change != nil
-      puts "\n"
+      puts "\n\n"
     end
     nil
   end
 
   def display_stock_details(stock)
-
+    puts "\n\n"
     puts "\n#{stock.company_name} Common Stock Quote & Summary Data".colorize(:blue)
     puts "#{stock.last_sale.colorize(:magenta)} #{stock.change_net_percentage.colorize(:magenta)}"
-    puts "\n\n"
+    puts "\n"
     puts "Key Stock Data \n"
 
-    stock.all_details.each do |detail|
-      puts "#{detail}: #{stock.send(detail)} "
+    stock.formatted_detail_pairs.each do |detail|
+    
+      puts "#{detail[0]}: #{detail[1]} "
     end
+    puts "\n\n"
     # puts "Best Bid / Ask: " + stock.best_bid_ask.colorize(:magenta)
     # puts "1 Year Target: " + stock.year_target.colorize(:magenta)
     # puts "Today's High / Low: " + stock.todays_high_low.colorize(:magenta)
