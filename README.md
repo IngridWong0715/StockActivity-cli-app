@@ -1,8 +1,7 @@
 # StockActivity
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/stock_activity`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+StockActivity lets you view daily stock activities retrieved from the Nasdaq Stock Market website.
+You can view in realtime stocks that are listed as "Most Active", "Most Advanced", "Most Declined", "Dollar Volume", or "Unusual Volume".
 
 ## Installation
 
