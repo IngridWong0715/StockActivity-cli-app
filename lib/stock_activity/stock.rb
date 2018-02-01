@@ -5,8 +5,6 @@ class StockActivity::Stock
   :dividend_payment_date, :current_yield, :beta, :special_dividend, :special_dividend_date, :special_dividend_payment_date,
   :formatted_detail_pairs
 
-
-
   @@all = []
 
   def initialize(stock_hash)
