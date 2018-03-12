@@ -21,10 +21,7 @@ class StockActivity::Stock
     end
 
     if category == "most active"
-    hello =  @@most_active << self if !@@most_active.include?(self)
-    binding.pry
-  
-
+      @@most_active << self if !@@most_active.include?(self)
 
     elsif category == "most advanced"
       @@most_advanced << self
