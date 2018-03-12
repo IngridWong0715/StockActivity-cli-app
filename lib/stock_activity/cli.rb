@@ -44,6 +44,7 @@ class StockActivity::CLI
   def detail_view
     puts "Please enter the stock symbol.\n"
     input = gets.strip.upcase
+    binding.pry
     while StockActivity::Stock.find_by_name(input) == nil
       puts "Invalid input. Please enter a stock symbol that's been displayed."
       input = gets.strip.upcase

@@ -34,7 +34,7 @@ def self.scrape(selector)
 
   if companies.count == 20 # ALL CATEGORIES EXCEPT UNUSUAL VOLUME
 
-    nested = transform_to_nested(companies, 4)
+    nested = transform_array_to_nested_array(companies, 4)
 #RETURNS a nested array:
  #    [["Facebook, Inc. (FB)", "$195.11", "8.22 ▲ 4.40%", "32,528,212"],
  # ["PayPal Holdings, Inc. (PYPL)", "$80.02", "5.30 ▼ 6.21%", "27,633,293"],
@@ -61,7 +61,7 @@ def self.scrape(selector)
 
   elsif companies.count == 25 # UNUSUAL VOLUME
 
-    nested = transform_to_nested(companies, 5)
+    nested = transform_array_to_nested_array(companies, 5)
     companies_info = []
     nested.each do |company_group|
       company = {}
@@ -115,26 +115,31 @@ end
   #START: DETAIL METHODS
 
   def self.scrape_stock_details(stock) #stock is an instance of Stock class
-    # url = stock.url
-    stock_page = Nokogiri::HTML(open(stock.url))  #should be stock.url
+
+    stock_page = Nokogiri::HTML(open(stock.url))
     stock_details_to_transform = stock_page.css("div.row.overview-results.relativeP div.table-row div.table-cell")
 
-    transformed = transform_to_nested(stock_details_to_transform, 2)
+    transformed = transform_array_to_nested_array(stock_details_to_transform, 2)
     stock.formatted_detail_pairs = transformed #FOR DISPLAYING PURPOSES: [[detail, value], [detail, value]...]
+    go_from_array_to_hash(transformed)
 
+  end
+
+  def self.go_from_array_to_hash(transformed)
+    #step 1. format the attribute to remove all special chars in order to create symbols
     copied_array = transformed.reduce([]) do |acc, attr_pair| #copy transformed and format the attribute to remove all special chars in order to create symbols
       new_string = attr_pair[0].downcase.gsub(/\s\/\s/, "_").gsub(/\s\/\s/, "_").gsub(/\s/, "_").gsub(/\d+_/, "").gsub(/\//, "").gsub(/\(/, "").gsub(/\)/, "").gsub(/\'/, "").gsub(/\./, "")
       acc << [new_string, attr_pair[1]]
     end
 
+    #step 2. #create a hash {attr: value, attr: value, ... }
     copied_array.reduce({}) do |acc, attribute_pair|  #create a hash {attr: value, attr: value, ... }
       acc[attribute_pair[0].to_sym] = attribute_pair[1]
       acc
     end
-
   end
 
-  def self.transform_to_nested(array, num)
+  def self.transform_array_to_nested_array(array, num)
     temp_array = []
     final_array = []
     array.each_with_index do |element, index|

@@ -33,6 +33,8 @@ class StockActivity::Stock
     elsif category == "unusual volume"
       @@unusual_volume << self
     end
+    @@all <<self
+
   end
 
   def self.create_from_collection(stocks_array, category)
