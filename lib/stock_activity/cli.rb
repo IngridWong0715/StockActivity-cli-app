@@ -38,7 +38,7 @@ class StockActivity::CLI
     selector = transform_input_to_selector(input)
     stocks_collection = StockActivity::Scraper.scrape(selector)
     StockActivity::Stock.create_from_collection(stocks_collection, input)
-    display_stocks(StockActivity::Stock.find_from_category(input))
+    display_stocks(StockActivity::Stock.find_by_category(input))
   end
 
   def detail_view

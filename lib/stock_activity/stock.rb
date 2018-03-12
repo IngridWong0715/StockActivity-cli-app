@@ -21,7 +21,11 @@ class StockActivity::Stock
     end
 
     if category == "most active"
-      @@most_active << self
+    hello =  @@most_active << self if !@@most_active.include?(self)
+    binding.pry
+  
+
+
     elsif category == "most advanced"
       @@most_advanced << self
     elsif category == "most declined"
@@ -53,7 +57,7 @@ class StockActivity::Stock
     @@all
   end
 
-  def self.find_from_category(category)
+  def self.find_by_category(category)
     if category == "most active"
       @@most_active
     elsif category == "most advanced"
