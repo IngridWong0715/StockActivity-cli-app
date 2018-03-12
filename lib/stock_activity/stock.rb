@@ -34,7 +34,8 @@ class StockActivity::Stock
   end
 
   def self.create_from_collection(stocks_array, category)
-    stocks_array.each {|stock_hash| self.new(stock_hash, category)}
+    stocks= stocks_array.each {|stock_hash| self.new(stock_hash, category)}
+    binding.pry
   end
 
   def add_more_attributes(attribute_hash)
