@@ -6,17 +6,35 @@ class StockActivity::Stock
   :formatted_detail_pairs
 
   @@all = []
+  @@most_active = []
+  @@most_advanced = []
+  @@most_declined = []
+  @@dollar_volume = []
+  @@unusual_volume = []
 
-  def initialize(stock_hash)
+
+  def initialize(stock_hash, category)
     @all_details = []
+
     stock_hash.each do |key, value|
       self.send("#{key}=", value)
     end
-    @@all << self
+
+    if category == "most active"
+      @@most_active << self
+    elsif category == "most advanced"
+      @@most_advanced << self
+    elsif category == "most declined"
+      @@most_declined << self
+    elsif category == "dollar volume"
+      @@dollar_volume << self
+    elsif category == "unusual volume"
+      @@unusual_volume << self
+    end
   end
 
-  def self.create_from_collection(stocks_array)
-    stocks_array.each {|stock_hash| self.new(stock_hash)}
+  def self.create_from_collection(stocks_array, category)
+    stocks_array.each {|stock_hash| self.new(stock_hash, category)}
   end
 
   def add_more_attributes(attribute_hash)
@@ -33,4 +51,22 @@ class StockActivity::Stock
   def self.all
     @@all
   end
+
+  def self.category(category)
+    if category == "most active"
+      @@most_active
+    elsif category == "most advanced"
+      @@most_advanced
+    elsif category == "most declined"
+      @@most_declined
+    elsif category == "dollar volume"
+      @@dollar_volume
+    elsif category == "unusual volume"
+      @@unusual_volume
+    end
+  end
+
+
+
+
 end

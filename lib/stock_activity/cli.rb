@@ -37,8 +37,9 @@ class StockActivity::CLI
     end
     selector = transform_input_to_selector(input)
     stocks_collection = StockActivity::Scraper.scrape(selector)
-    StockActivity::Stock.create_from_collection(stocks_collection)
-    display_stocks
+    StockActivity::Stock.create_from_collection(stocks_collection, input)
+    stocks = StockActivity::Stock.category(input)
+    display_stocks(stocks)
   end
 
   def detail_view
@@ -70,9 +71,9 @@ class StockActivity::CLI
     end
   end
 
-  def display_stocks
+  def display_stocks(stocks)
     puts "\n\n"
-    StockActivity::Stock.all.each do |stock|
+    stocks.each do |stock|
       puts "Company: " + stock.company_name.colorize(:blue)
       puts "Last Sale: " + stock.last_sale.colorize(:magenta)
       puts "Change Net/%: " + stock.change_net_percentage.colorize(:magenta)
