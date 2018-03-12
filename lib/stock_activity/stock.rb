@@ -34,8 +34,8 @@ class StockActivity::Stock
   end
 
   def self.create_from_collection(stocks_array, category)
-    stocks= stocks_array.each {|stock_hash| self.new(stock_hash, category)}
-    binding.pry
+    stocks_array.each {|stock_hash| self.new(stock_hash, category)}
+
   end
 
   def add_more_attributes(attribute_hash)
@@ -53,7 +53,7 @@ class StockActivity::Stock
     @@all
   end
 
-  def self.category(category)
+  def self.find_from_category(category)
     if category == "most active"
       @@most_active
     elsif category == "most advanced"
