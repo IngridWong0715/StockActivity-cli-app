@@ -12,35 +12,6 @@ class StockActivity::Stock
   @@dollar_volume = []
   @@unusual_volume = []
 
-
-  # def initialize(stock_hash, category)
-  #   @all_details = []
-  #
-  #   stock_hash.each do |key, value|
-  #     self.send("#{key}=", value)
-  #   end
-  #
-  #   if category == "most active"
-  #     #DEMANDE: POURQUOI CA MARCHE PAS?
-  #        @@most_active << self  if !@@most_active.include?(self) # if most active doesn't include self, add self
-  #
-  #   elsif category == "most advanced"
-  #     @@most_advanced << self
-  #   elsif category == "most declined"
-  #     @@most_declined << self
-  #   elsif category == "dollar volume"
-  #     @@dollar_volume << self
-  #   elsif category == "unusual volume"
-  #     @@unusual_volume << self
-  #   end
-  #   @@all <<self
-  #
-  # end
-  #
-  # def self.create_from_collection(stocks_array, category)
-  #   stocks_array.each {|stock_hash| self.new(stock_hash, category)}
-  # end
-
   def self.create_from_collection_test(stocks_array, category)
     stocks_array.each do |stock_hash|
       stock = self.new
