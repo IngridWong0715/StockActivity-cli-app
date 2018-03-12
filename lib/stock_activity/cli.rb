@@ -1,5 +1,7 @@
 class StockActivity::CLI
 
+  CATEGORIES = ["most active", "most advanced", "most declined", "dollar volume", "unusual volume"]
+
   def start
     puts "\n\nWelcome to Stock Activities! This program lets you view daily stock activities.\n\n"
     main_loop
@@ -29,7 +31,7 @@ class StockActivity::CLI
     puts "Which type of stock activity would you like to see?"
     puts "I accept: most active, most advanced, most declined, dollar volume, unusual volume\n"
     input = gets.strip.downcase
-    while !(["most active", "most advanced", "most declined", "dollar volume", "unusual volume"].include?(input))
+    while !(CATEGORIES.include?(input))
       puts "Invalid input. Please enter  most active, most advanced, most declined, dollar volume, unusual volume\n"
       input = gets.strip.downcase
     end

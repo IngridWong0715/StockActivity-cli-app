@@ -3,23 +3,45 @@
 class StockActivity::Scraper
 
 def self.scrape(selector)
-  doc = Nokogiri::HTML(open("http://www.nasdaq.com/"))
+  doc = Nokogiri::HTML(open("https://www.nasdaq.com/"))
   companies =  doc.css("div\##{selector} tr > td").children.reduce([]) do |accumulator, company|
     if company.text.match(/[A-Z]|\d|unch/)
       accumulator << company.text.strip
     end
   accumulator
   end
+#companies =
+ #  ["Micron Technology, Inc. (MU)",
+ # "$57.59",
+ # "3 ▲ 5.50%",
+ # "8,526,262",
+ # "Oclaro, Inc. (OCLR)",
+ # "$9.67",
+ # "1.82 ▲ 23.18%",
+ # "6,885,542",
+ # "Intel Corporation (INTC)",
+ # "$51.05",
+ # "1.14 ▼ 2.18%",
+ # "3,237,023",
+ # "Apple Inc. (AAPL)",
+ # "$181.03",
+ # "1.05 ▲ 0.58%",
+ # "2,276,539",
+ # "Microsoft Corporation (MSFT)",
+ # "$96.62",
+ # "0.08 ▲ 0.08%",
+ # "1,423,996"]
 
-  if companies.count == 20
+  if companies.count == 20 # ALL CATEGORIES EXCEPT UNUSUAL VOLUME
 
     nested = transform_to_nested(companies, 4)
+#RETURNS a nested array:
  #    [["Facebook, Inc. (FB)", "$195.11", "8.22 ▲ 4.40%", "32,528,212"],
  # ["PayPal Holdings, Inc. (PYPL)", "$80.02", "5.30 ▼ 6.21%", "27,633,293"],
  # ["Microsoft Corporation (MSFT)", "$95.655", "0.65 ▲ 0.68%", "21,498,416"],
  # ["eBay Inc. (EBAY)", "$46.4775", "5.90 ▲ 14.53%", "18,418,237"],
  # ["VelocityShares Daily 2x VIX Short-Term ETN (TVIX)", "$5.72", "0.58 ▼ 9.21%", "14,940,614"]]
-
+#
     companies_info = []
     nested.each do |company_group|
       company = {}
@@ -37,7 +59,7 @@ def self.scrape(selector)
       end
     end
 
-  elsif companies.count == 25
+  elsif companies.count == 25 # UNUSUAL VOLUME
 
     nested = transform_to_nested(companies, 5)
     companies_info = []
@@ -60,6 +82,11 @@ def self.scrape(selector)
     end
 
   end
+# companies_info =
+# [{:company_name=>"Micron Technology, Inc. (MU)", :last_sale=>"$57.66", :change_net_percentage=>"3.07 ▲ 5.62%", :share_volume=>"10,690,943"},
+#  {:company_name=>"Oclaro, Inc. (OCLR)", :last_sale=>"$9.725", :change_net_percentage=>"1.88 ▲ 23.89%", :share_volume=>"8,110,173"},
+#  ...]
+
   #scrape links and add them to each company:
   links = doc.css("div##{selector} div.coName a").collect {|company| company.attr('href')}.uniq!
   companies_info.each do |company|
@@ -68,7 +95,7 @@ def self.scrape(selector)
   end
   companies_info
 
-  #returns an array of hashes:
+  #FINAL RETURN VALUE: an array of hashes:
  #  [{:company_name=>"Facebook, Inc. (FB)",
  #  :last_sale=>"$195.11",
  #  :change_net_percentage=>"8.22 ▲ 4.40%",
