@@ -7,43 +7,34 @@ class StockActivity::Stock
 
   @@all = []
 
-
   def initialize
     @all_details = []
     @categories = []
   end
 
-  def self.create_from_collection(stocks_array, category)
+  def self.find_or_create_from_collection(stocks_array, category)
+
+    stocks = []
+
     stocks_array.each do |stock_hash|
-      stock = self.new
-
-      stock_hash.each do |key, value|
-        stock.send("#{key}=", value)
+      search_result = @@all.detect do |stock|
+        stock.company_name == stock_hash[:company_name] && stock.categories.include?(category)
       end
-
-      stock.categories << category
-
-      @@all << stock
-
-    end
-  end
-
-  def self.find_or_create_from_collection_test(stocks_array, category)
-    stocks_array.each do |stock_hash|
-      stock = self.new
-
-      stock_hash.each do |key, value|
-        stock.send("#{key}=", value)
+      if search_result
+        stocks << search_result
+      else
+        stock = self.new
+        stock_hash.each do |key, value|
+          stock.send("#{key}=", value)
+        end
+        stock.categories << category
+        @@all << stock
+        stocks << stock
       end
-
-      stock.categories << category
-
-      @@all << stock
-
     end
+
+    stocks
   end
-
-
 
   def add_more_attributes(attribute_hash)
     attribute_hash.each do |key, value|
@@ -54,14 +45,6 @@ class StockActivity::Stock
 
   def self.find_by_name(name)
     @@all.detect {|stock| stock.company_name.include?(name)}
-  end
-
-  def self.find_by_category(category)
-    @@all.select {|stock| stock.categories.include?(category)}
-  end
-
-  def self.all
-    @@all
   end
 
 end
