@@ -36,8 +36,11 @@ class StockActivity::CLI
       input = gets.strip.downcase
     end
     selector = transform_input_to_selector(input)
+
     stocks_collection = StockActivity::Scraper.scrape(selector)
-    StockActivity::Stock.create_from_collection_test(stocks_collection, input)
+    StockActivity::Stock.create_from_collection(stocks_collection, input)
+
+
     display_stocks(StockActivity::Stock.find_by_category(input))
   end
 
@@ -90,6 +93,8 @@ class StockActivity::CLI
     puts "#{stock.last_sale.colorize(:magenta)} #{stock.change_net_percentage.colorize(:magenta)}"
     puts "\n"
     puts "Key Stock Data \n"
+
+
     stock.formatted_detail_pairs.each do |detail|
       puts "#{detail[0]}: #{detail[1].colorize(:magenta)} "
     end
