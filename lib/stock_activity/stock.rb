@@ -23,7 +23,7 @@ class StockActivity::Stock
 
       if category == "most active"
         #DEMANDE: POURQUOI CA MARCHE PAS?
-           @@most_active << stock  if !@@most_active.include?(stock) # if most active doesn't include self, add self
+           @@most_active << stock  if !@@most_active.include?(stock) 
 
       elsif category == "most advanced"
         @@most_advanced << stock
