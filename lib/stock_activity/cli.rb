@@ -37,14 +37,14 @@ class StockActivity::CLI
     end
     selector = transform_input_to_selector(input)
     stocks_collection = StockActivity::Scraper.scrape(selector)
-    StockActivity::Stock.create_from_collection(stocks_collection, input)
+    StockActivity::Stock.create_from_collection_test(stocks_collection, input)
     display_stocks(StockActivity::Stock.find_by_category(input))
   end
 
   def detail_view
     puts "Please enter the stock symbol.\n"
     input = gets.strip.upcase
-    binding.pry
+
     while StockActivity::Stock.find_by_name(input) == nil
       puts "Invalid input. Please enter a stock symbol that's been displayed."
       input = gets.strip.upcase

@@ -13,33 +13,59 @@ class StockActivity::Stock
   @@unusual_volume = []
 
 
-  def initialize(stock_hash, category)
-    @all_details = []
+  # def initialize(stock_hash, category)
+  #   @all_details = []
+  #
+  #   stock_hash.each do |key, value|
+  #     self.send("#{key}=", value)
+  #   end
+  #
+  #   if category == "most active"
+  #     #DEMANDE: POURQUOI CA MARCHE PAS?
+  #        @@most_active << self  if !@@most_active.include?(self) # if most active doesn't include self, add self
+  #
+  #   elsif category == "most advanced"
+  #     @@most_advanced << self
+  #   elsif category == "most declined"
+  #     @@most_declined << self
+  #   elsif category == "dollar volume"
+  #     @@dollar_volume << self
+  #   elsif category == "unusual volume"
+  #     @@unusual_volume << self
+  #   end
+  #   @@all <<self
+  #
+  # end
+  #
+  # def self.create_from_collection(stocks_array, category)
+  #   stocks_array.each {|stock_hash| self.new(stock_hash, category)}
+  # end
 
-    stock_hash.each do |key, value|
-      self.send("#{key}=", value)
+  def self.create_from_collection_test(stocks_array, category)
+    stocks_array.each do |stock_hash|
+      stock = self.new
+      @all_details = []
+
+      stock_hash.each do |key, value|
+        stock.send("#{key}=", value)
+      end
+
+      if category == "most active"
+        #DEMANDE: POURQUOI CA MARCHE PAS?
+           @@most_active << stock  if !@@most_active.include?(stock) # if most active doesn't include self, add self
+
+      elsif category == "most advanced"
+        @@most_advanced << stock
+      elsif category == "most declined"
+        @@most_declined << stock
+      elsif category == "dollar volume"
+        @@dollar_volume << stock
+      elsif category == "unusual volume"
+        @@unusual_volume << stock
+      end
+      @@all << stock
+
     end
-
-    if category == "most active"
-      #DEMANDE: POURQUOI CA MARCHE PAS?
-         @@most_active << self  if !@@most_active.include?(self) # if most active doesn't include self, add self
-
-    elsif category == "most advanced"
-      @@most_advanced << self
-    elsif category == "most declined"
-      @@most_declined << self
-    elsif category == "dollar volume"
-      @@dollar_volume << self
-    elsif category == "unusual volume"
-      @@unusual_volume << self
-    end
-    @@all <<self
-
-  end
-
-  def self.create_from_collection(stocks_array, category)
-    stocks_array.each {|stock_hash| self.new(stock_hash, category)}
-
   end
 
   def add_more_attributes(attribute_hash)
@@ -70,8 +96,5 @@ class StockActivity::Stock
       @@unusual_volume
     end
   end
-
-
-
 
 end
