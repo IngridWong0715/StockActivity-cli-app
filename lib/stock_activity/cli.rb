@@ -39,7 +39,6 @@ class StockActivity::CLI
 
     stocks_collection = StockActivity::Scraper.scrape(selector)
     stocks = StockActivity::Stock.find_or_create_from_collection(stocks_collection, input)
-    binding.pry
 
 
     display_stocks(stocks)

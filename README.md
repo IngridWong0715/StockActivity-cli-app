@@ -19,6 +19,8 @@ Or install it yourself as:
 
     $ gem install stock_activity
 
+Run
+`./bin/stock-activity` to start the app
 
 ## Development
 
